@@ -10,12 +10,12 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class InMemoryPersistence {
+public class InMemoryRepository {
 
     private List<AdVO> ads;
     private List<PictureVO> pictures;
 
-    public InMemoryPersistence() {
+    public InMemoryRepository() {
         ads = new ArrayList<AdVO>();
         ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!", Collections.<Integer>emptyList(), 300, null, null, null));
         ads.add(new AdVO(2, "FLAT", "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo", Arrays.asList(4), 300, null, null, null));
