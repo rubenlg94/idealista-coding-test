@@ -1,4 +1,4 @@
-package com.idealista.infrastructure.persistence;
+package com.idealista.repositores;
 
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
