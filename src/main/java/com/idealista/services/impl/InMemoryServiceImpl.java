@@ -11,15 +11,16 @@ public class InMemoryServiceImpl implements InMemoryService {
     @Override
     public int calculateScore(AdVO ad, List<PictureVO> pictures) {
         int score = 0;
-        score = checkAdPictures(ad, pictures, score);
+        score = checkAdPictures(pictures, score);
         score = checkAdDescription(ad, score);
+        score = checkIfAdIsComplete(ad, pictures, score);
 
         score = Math.max(score, 0);
         score = Math.min(score, 100);
         return score;
     }
 
-    public int checkAdPictures(AdVO ad, List<PictureVO> pictures, int currentScore) {
+    public int checkAdPictures(List<PictureVO> pictures, int currentScore) {
         if (pictures != null && !pictures.isEmpty()) {
             for (PictureVO picture : pictures) {
                 if (picture.getQuality().equals("HD")) {
@@ -80,5 +81,30 @@ public class InMemoryServiceImpl implements InMemoryService {
         }
         return currentScore;
     }
+
+    private int checkIfAdIsComplete(AdVO ad, List<PictureVO> pictures, int currentScore) {
+        if (pictures != null && !pictures.isEmpty()) {
+            switch (ad.getTypology()) {
+                case "CHALET":
+                    if (ad.getDescription() != null && !ad.getDescription().isEmpty()
+                            && ad.getHouseSize() != null && ad.getHouseSize() != 0
+                            && ad.getGardenSize() != null && ad.getGardenSize() != 0) {
+                        currentScore += 40;
+                    }
+                    break;
+                case "FLAT":
+                    if (ad.getDescription() != null && !ad.getDescription().isEmpty()
+                            && ad.getHouseSize() != null && ad.getHouseSize() != 0) {
+                        currentScore += 40;
+                    }
+                    break;
+                case "GARAGE":
+                    currentScore += 40;
+                    break;
+            }
+        }
+        return currentScore;
+    }
+
 
 }

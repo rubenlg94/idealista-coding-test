@@ -110,6 +110,18 @@ public class InMemoryServiceTest {
         assertEquals(inMemoryServiceImpl.calculateScore(adWithFiveAwardedWords, Collections.singletonList(pictureHd)), 50);
     }
 
+    @Test
+    public void testIncreaseScoreIfAdIsComplete(){
+        AdVO flat = new AdVO(1, "FLAT", "Descripción", Collections.singletonList(1), 20, 0, 0, null);
+        AdVO chalet = new AdVO(2, "CHALET", "Descripción", Collections.singletonList(1), 20, 50, 0, null);
+        AdVO garage = new AdVO(2, "GARAGE", null, Collections.singletonList(1), 0, 0, 0, null);
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+
+        assertEquals(inMemoryServiceImpl.calculateScore(flat, Collections.singletonList(pictureHd)), 65);
+        assertEquals(inMemoryServiceImpl.calculateScore(chalet, Collections.singletonList(pictureHd)), 65);
+        assertEquals(inMemoryServiceImpl.calculateScore(garage, Collections.singletonList(pictureHd)), 60);
+    }
+
 
 
 
