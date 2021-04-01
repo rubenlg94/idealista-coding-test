@@ -4,10 +4,8 @@ import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryRepository {
@@ -37,5 +35,23 @@ public class InMemoryRepository {
         pictures.add(new PictureVO(8, "http://www.idealista.com/pictures/8", "HD"));
     }
 
-    //TODO crea los métodos que necesites
+    public List<AdVO> findAllAds(){
+        return ads;
+    }
+
+    public List<PictureVO> findAllPictures(){
+        return pictures;
+    }
+
+    public List<PictureVO> findPicturesByAd(int adId){
+        List<PictureVO> pictureVOS = new ArrayList<>();
+        Optional<AdVO> optionalAdVO = ads.stream().filter(adVO -> adVO.getId() == adId).findAny();
+        if(optionalAdVO.isPresent()){
+            AdVO ad = optionalAdVO.get();
+            pictureVOS = pictures.stream().filter(pictureVO -> ad.getPictures().contains(pictureVO.getId())).collect(Collectors.toList());
+        }
+        return pictureVOS;
+    }
+
+
 }

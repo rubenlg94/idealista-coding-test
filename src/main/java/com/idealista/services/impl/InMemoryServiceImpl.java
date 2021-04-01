@@ -1,12 +1,37 @@
 package com.idealista.services.impl;
 
+import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.InMemoryService;
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class InMemoryServiceImpl implements InMemoryService {
+
+    private final InMemoryRepository inMemoryRepository;
+
+    public InMemoryServiceImpl(InMemoryRepository inMemoryRepository) {
+        this.inMemoryRepository = inMemoryRepository;
+    }
+
+    @Override
+    public List<AdVO> findAllAds() {
+        return inMemoryRepository.findAllAds();
+    }
+
+    @Override
+    public List<PictureVO> findAllPictures() {
+        return inMemoryRepository.findAllPictures();
+    }
+
+    @Override
+    public List<PictureVO> findPicturesByAd(int adId) {
+        return inMemoryRepository.findPicturesByAd(adId);
+    }
 
     @Override
     public int calculateScore(AdVO ad, List<PictureVO> pictures) {

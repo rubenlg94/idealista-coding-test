@@ -1,5 +1,6 @@
 package com.idealista.services;
 
+import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.impl.InMemoryServiceImpl;
 import com.idealista.utilities.Utilities;
 import com.idealista.valueobjects.AdVO;
@@ -7,6 +8,7 @@ import com.idealista.valueobjects.PictureVO;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
@@ -15,12 +17,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 public class InMemoryServiceTest {
 
     private List<AdVO> ads;
     private List<PictureVO> pictures;
-    private int puntuations[];
+
+    @Mock
+    private InMemoryRepository inMemoryRepository;
 
     @InjectMocks
     private InMemoryServiceImpl inMemoryServiceImpl;
@@ -30,7 +35,6 @@ public class InMemoryServiceTest {
         MockitoAnnotations.initMocks(this);
         ads = Utilities.generateTestAds();
         pictures = Utilities.generateTestPictures();
-        puntuations = Utilities.getManuallyCalculatedScores();
     }
 
     @Test
@@ -122,6 +126,46 @@ public class InMemoryServiceTest {
         assertEquals(inMemoryServiceImpl.calculateScore(garage, Collections.singletonList(pictureHd)), 60);
     }
 
+    @Test
+    public void testFindAllAds(){
+        AdVO flat = new AdVO(1, "FLAT", "Descripción", Collections.singletonList(1), 20, 0, 0, null);
+        AdVO chalet = new AdVO(2, "CHALET", "Descripción", Collections.singletonList(1), 20, 50, 0, null);
+        AdVO garage = new AdVO(2, "GARAGE", null, Collections.singletonList(1), 0, 0, 0, null);
+        List<AdVO> adsToReturn = Arrays.asList(flat, chalet, garage);
+        when(inMemoryRepository.findAllAds()).thenReturn(adsToReturn);
+
+        List<AdVO> adsReturned = inMemoryServiceImpl.findAllAds();
+
+        assertEquals(adsToReturn.size(), adsReturned.size());
+        assertArrayEquals(adsToReturn.stream().map(AdVO::getId).toArray(), adsReturned.stream().map(AdVO::getId).toArray());
+    }
+
+    @Test
+    public void testFindAllPictures(){
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+        PictureVO pictureSd = new PictureVO(2, "http://www.idealista.com/pictures/2", "SD");
+        List<PictureVO> picturesToReturn = Arrays.asList(pictureHd, pictureSd);
+        when(inMemoryRepository.findAllPictures()).thenReturn(picturesToReturn);
+
+        List<PictureVO> picturesReturned = inMemoryServiceImpl.findAllPictures();
+
+        assertEquals(picturesToReturn.size(), picturesReturned.size());
+        assertArrayEquals(picturesToReturn.stream().map(PictureVO::getId).toArray(), picturesReturned.stream().map(PictureVO::getId).toArray());
+    }
+
+    @Test
+    public void testFindPicturesByAd(){
+        AdVO adWithHdAndSDPictures = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 0, null);
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+        PictureVO pictureSd = new PictureVO(2, "http://www.idealista.com/pictures/2", "SD");
+        List<PictureVO> picturesToReturn = Arrays.asList(pictureHd, pictureSd);
+        when(inMemoryRepository.findPicturesByAd(adWithHdAndSDPictures.getId())).thenReturn(picturesToReturn);
+
+        List<PictureVO> picturesReturned = inMemoryServiceImpl.findPicturesByAd(1);
+
+        assertEquals(picturesToReturn.size(), picturesReturned.size());
+        assertEquals(picturesToReturn.size(), picturesReturned.size());
+    }
 
 
 
