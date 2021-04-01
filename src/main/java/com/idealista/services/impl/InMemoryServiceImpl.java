@@ -22,6 +22,9 @@ public class InMemoryServiceImpl implements InMemoryService {
         } else {
             score -= 10;
         }
+        if(ad.getDescription() != null && !ad.getDescription().isEmpty()){
+            score += 5;
+        }
         score = Math.max(score, 0);
         score = Math.min(score, 100);
         return score;
