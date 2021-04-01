@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,14 +44,20 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void scorePointsIfAdHasPictures(){
-        int manuallyCalculatedScores[] = {0, 20, 20, 10, 30, 10, 0, 20};
-        for (int i = 0; i < ads.size(); i++) {
-            AdVO ad = ads.get(i);
-            List<PictureVO> adPictures = pictures.stream().filter(pictureVO -> ad.getPictures() != null && ad.getPictures().contains(pictureVO.getId())).collect(Collectors.toList());
-            int adScore = inMemoryServiceImpl.calculateScore(ad, adPictures);
-            assertEquals(adScore, manuallyCalculatedScores[i]);
-        }
+    public void increaseScoreIfAdHasPictures(){
+        AdVO adWithHdAndSDPictures = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 0, null);
+        AdVO adWithHdPictures = new AdVO(2, "", "", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithSdPictures = new AdVO(3, "", "", Collections.singletonList(2), 0, 0, 0, null);
+        AdVO adWithoutPictures = new AdVO(4, "", "", Collections.emptyList(), 0, 0, 0, null);
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+        PictureVO pictureSd = new PictureVO(2, "http://www.idealista.com/pictures/2", "SD");
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithHdAndSDPictures, Arrays.asList(pictureHd, pictureSd)), 30);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithHdPictures, Collections.singletonList(pictureHd)), 20);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithSdPictures, Collections.singletonList(pictureSd)), 10);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithoutPictures, Collections.emptyList()), 0);
     }
+
+
+
 
 }
