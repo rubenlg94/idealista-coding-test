@@ -5,26 +5,24 @@ import java.util.List;
 import com.idealista.entities.PublicAd;
 import com.idealista.entities.QualityAd;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/ads")
 public class AdsController {
 
-    //TODO añade url del endpoint
+    @GetMapping("/quality")
     public ResponseEntity<List<QualityAd>> qualityListing() {
-        //TODO rellena el cuerpo del método
         return ResponseEntity.notFound().build();
     }
 
-    //TODO añade url del endpoint
+    @GetMapping("/public")
     public ResponseEntity<List<PublicAd>> publicListing() {
-        //TODO rellena el cuerpo del método
         return ResponseEntity.notFound().build();
     }
 
-    //TODO añade url del endpoint
+    @PatchMapping("/calculate-score")
     public ResponseEntity<Void> calculateScore() {
-        //TODO rellena el cuerpo del método
         return ResponseEntity.notFound().build();
     }
 }
