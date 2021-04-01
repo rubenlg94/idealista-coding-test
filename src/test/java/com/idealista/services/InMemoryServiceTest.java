@@ -57,6 +57,12 @@ public class InMemoryServiceTest {
         assertEquals(inMemoryServiceImpl.calculateScore(adWithoutPictures, Collections.emptyList()), 0);
     }
 
+    @Test
+    public void decreaseScoreIfAdHasNoPictures(){
+        AdVO adWithoutPictures = new AdVO(1, "", "", Collections.emptyList(), 0, 0, 0, null);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithoutPictures, Collections.emptyList()), 0);
+    }
+
 
 
 
