@@ -24,6 +24,33 @@ public class InMemoryServiceImpl implements InMemoryService {
         }
         if(ad.getDescription() != null && !ad.getDescription().isEmpty()){
             score += 5;
+            String lowerCaseDescription = ad.getDescription().toLowerCase();
+            int adDescriptionLength = lowerCaseDescription.split(" ").length;
+            if (adDescriptionLength >= 20 && adDescriptionLength <= 49) {
+                score += 10;
+            }
+            if (adDescriptionLength >= 50) {
+                if (ad.getTypology().equals("FLAT")) {
+                    score += 30;
+                } else if (ad.getTypology().equals("CHALET")) {
+                    score += 20;
+                }
+            }
+            if (lowerCaseDescription.contains("luminoso")) {
+                score += 5;
+            }
+            if (lowerCaseDescription.contains("nuevo")) {
+                score += 5;
+            }
+            if (lowerCaseDescription.contains("céntrico")) {
+                score += 5;
+            }
+            if (lowerCaseDescription.contains("reformado")) {
+                score += 5;
+            }
+            if (lowerCaseDescription.contains("ático")) {
+                score += 5;
+            }
         }
         score = Math.max(score, 0);
         score = Math.min(score, 100);

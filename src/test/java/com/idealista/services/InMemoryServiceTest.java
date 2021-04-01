@@ -73,6 +73,23 @@ public class InMemoryServiceTest {
         assertEquals(inMemoryServiceImpl.calculateScore(adWithDescription, Collections.singletonList(pictureHd)), 25);
     }
 
+    @Test
+    public void testIncreaseScoreIfAdHasAwardedWordsInDescription(){
+        // Arrange
+        AdVO adWithOneAwardedWord = new AdVO(1, "", "Luminoso", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithTwoAwardedWords = new AdVO(1, "", "Luminoso, Nuevo", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithThreeAwardedWords = new AdVO(1, "", "Luminoso, Nuevo, Céntrico", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithFourAwardedWords = new AdVO(1, "", "Luminoso, Nuevo, Céntrico, Reformado", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithFiveAwardedWords = new AdVO(1, "", "Luminoso, Nuevo, Céntrico, Reformado, Ático", Collections.singletonList(1), 0, 0, 0, null);
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+
+        // Assert
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithOneAwardedWord, Collections.singletonList(pictureHd)), 30);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithTwoAwardedWords, Collections.singletonList(pictureHd)), 35);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithThreeAwardedWords, Collections.singletonList(pictureHd)), 40);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithFourAwardedWords, Collections.singletonList(pictureHd)), 45);
+        assertEquals(inMemoryServiceImpl.calculateScore(adWithFiveAwardedWords, Collections.singletonList(pictureHd)), 50);
+    }
 
 
 
