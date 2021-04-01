@@ -1,0 +1,5 @@
+server:
+  port: 1994
+
+ads-configuration:
+  minimum-score: 40

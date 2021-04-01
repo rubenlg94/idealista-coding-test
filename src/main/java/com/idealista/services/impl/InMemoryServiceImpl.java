@@ -12,6 +12,9 @@ import java.util.List;
 @Service
 public class InMemoryServiceImpl implements InMemoryService {
 
+    @Value("${ads-configuration.minimum-score}")
+    private int minimumScore;
+
     private final InMemoryRepository inMemoryRepository;
 
     public InMemoryServiceImpl(InMemoryRepository inMemoryRepository) {
