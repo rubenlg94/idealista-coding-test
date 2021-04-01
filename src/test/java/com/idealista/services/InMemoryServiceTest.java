@@ -35,7 +35,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void scoreIsBetween0And100(){
+    public void testScoreIsBetween0And100(){
         for(AdVO ad : ads){
             List<PictureVO> adPictures = pictures.stream().filter(pictureVO -> ad.getPictures() != null && ad.getPictures().contains(pictureVO.getId())).collect(Collectors.toList());
             int adScore = inMemoryServiceImpl.calculateScore(ad, adPictures);
@@ -44,13 +44,16 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void increaseScoreIfAdHasPictures(){
+    public void testIncreaseScoreIfAdHasPictures(){
+        // Arrange
         AdVO adWithHdAndSDPictures = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 0, null);
         AdVO adWithHdPictures = new AdVO(2, "", "", Collections.singletonList(1), 0, 0, 0, null);
         AdVO adWithSdPictures = new AdVO(3, "", "", Collections.singletonList(2), 0, 0, 0, null);
         AdVO adWithoutPictures = new AdVO(4, "", "", Collections.emptyList(), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
         PictureVO pictureSd = new PictureVO(2, "http://www.idealista.com/pictures/2", "SD");
+
+        // Assert
         assertEquals(inMemoryServiceImpl.calculateScore(adWithHdAndSDPictures, Arrays.asList(pictureHd, pictureSd)), 30);
         assertEquals(inMemoryServiceImpl.calculateScore(adWithHdPictures, Collections.singletonList(pictureHd)), 20);
         assertEquals(inMemoryServiceImpl.calculateScore(adWithSdPictures, Collections.singletonList(pictureSd)), 10);
@@ -58,17 +61,18 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void decreaseScoreIfAdHasNoPictures(){
+    public void testDecreaseScoreIfAdHasNoPictures(){
         AdVO adWithoutPictures = new AdVO(1, "", "", Collections.emptyList(), 0, 0, 0, null);
         assertEquals(inMemoryServiceImpl.calculateScore(adWithoutPictures, Collections.emptyList()), 0);
     }
 
     @Test
-    public void increaseScoreIfAdHasDescription(){
-        AdVO adWithDescription = new AdVO(4, "", "Descripción", Collections.singletonList(1), 0, 0, 0, null);
+    public void testIncreaseScoreIfAdHasDescription(){
+        AdVO adWithDescription = new AdVO(1, "", "Descripción", Collections.singletonList(1), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
         assertEquals(inMemoryServiceImpl.calculateScore(adWithDescription, Collections.singletonList(pictureHd)), 25);
     }
+
 
 
 
