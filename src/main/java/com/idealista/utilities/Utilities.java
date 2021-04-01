@@ -10,8 +10,8 @@ import java.util.List;
 
 public class Utilities {
 
-    public static int[] generateScores() {
-        int scores[] = new int[8];
+    public static int[] getManuallyCalculatedScores() {
+        int[] scores = new int[8];
         scores[0] = (Math.max(-10 + 5, 0)); // Sin imágenes, con descripción
         scores[1] = (Math.max(20 + 5 + 15 + 40, 0)); // Con una imagen HD, con descripción, con 3 palabras destacadas, completo
         scores[2] = (Math.max(20, 0)); // Con una imagen HD

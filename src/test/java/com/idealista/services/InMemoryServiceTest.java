@@ -31,7 +31,7 @@ public class InMemoryServiceTest {
         MockitoAnnotations.initMocks(this);
         ads = Utilities.generateTestAds();
         pictures = Utilities.generateTestPictures();
-        puntuations = Utilities.generateScores();
+        puntuations = Utilities.getManuallyCalculatedScores();
     }
 
     @Test
