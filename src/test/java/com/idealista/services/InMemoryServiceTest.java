@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -74,13 +73,33 @@ public class InMemoryServiceTest {
     }
 
     @Test
+    public void testIncreaseScoreIfDescriptionHasBetween20And49Words(){
+        AdVO flat = new AdVO(1, "FLAT", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO chalet = new AdVO(2, "CHALET", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20", Collections.singletonList(1), 0, 0, 0, null);
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+
+        assertEquals(inMemoryServiceImpl.calculateScore(flat, Collections.singletonList(pictureHd)), 35);
+        assertEquals(inMemoryServiceImpl.calculateScore(chalet, Collections.singletonList(pictureHd)), 35);
+    }
+
+    @Test
+    public void testIncreaseScoreIfDescriptionHas50WordsOrMore(){
+        AdVO flat = new AdVO(1, "FLAT", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO chalet = new AdVO(2, "CHALET", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50", Collections.singletonList(1), 0, 0, 0, null);
+        PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+
+        assertEquals(inMemoryServiceImpl.calculateScore(flat, Collections.singletonList(pictureHd)), 55);
+        assertEquals(inMemoryServiceImpl.calculateScore(chalet, Collections.singletonList(pictureHd)), 45);
+    }
+
+    @Test
     public void testIncreaseScoreIfAdHasAwardedWordsInDescription(){
         // Arrange
-        AdVO adWithOneAwardedWord = new AdVO(1, "", "Luminoso", Collections.singletonList(1), 0, 0, 0, null);
-        AdVO adWithTwoAwardedWords = new AdVO(1, "", "Luminoso, Nuevo", Collections.singletonList(1), 0, 0, 0, null);
-        AdVO adWithThreeAwardedWords = new AdVO(1, "", "Luminoso, Nuevo, Céntrico", Collections.singletonList(1), 0, 0, 0, null);
-        AdVO adWithFourAwardedWords = new AdVO(1, "", "Luminoso, Nuevo, Céntrico, Reformado", Collections.singletonList(1), 0, 0, 0, null);
-        AdVO adWithFiveAwardedWords = new AdVO(1, "", "Luminoso, Nuevo, Céntrico, Reformado, Ático", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithOneAwardedWord = new AdVO(1, "FLAT", "Luminoso", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithTwoAwardedWords = new AdVO(1, "FLAT", "Luminoso, Nuevo", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithThreeAwardedWords = new AdVO(1, "FLAT", "Luminoso, Nuevo, Céntrico", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithFourAwardedWords = new AdVO(1, "FLAT", "Luminoso, Nuevo, Céntrico, Reformado", Collections.singletonList(1), 0, 0, 0, null);
+        AdVO adWithFiveAwardedWords = new AdVO(1, "FLAT", "Luminoso, Nuevo, Céntrico, Reformado, Ático", Collections.singletonList(1), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
 
         // Assert
