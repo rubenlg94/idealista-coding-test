@@ -1,13 +1,16 @@
 package com.idealista.controllers;
 
-import java.util.List;
-
 import com.idealista.entities.PublicAd;
 import com.idealista.entities.QualityAd;
 import com.idealista.services.InMemoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/ads")

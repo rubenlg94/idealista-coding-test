@@ -3,9 +3,6 @@ package com.idealista.controllers;
 import com.idealista.entities.PublicAd;
 import com.idealista.entities.QualityAd;
 import com.idealista.services.InMemoryService;
-import com.idealista.utilities.Utilities;
-import com.idealista.valueobjects.AdVO;
-import com.idealista.valueobjects.PictureVO;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -14,11 +11,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class AdsControllerTest {
@@ -30,7 +26,7 @@ public class AdsControllerTest {
     private AdsController adsController;
 
     @Before
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
     }
 

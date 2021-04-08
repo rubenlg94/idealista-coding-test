@@ -36,14 +36,14 @@ public class InMemoryServiceTest {
     private InMemoryServiceImpl inMemoryServiceImpl;
 
     @Before
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
         ads = Utilities.generateTestAds();
         pictures = Utilities.generateTestPictures();
     }
 
     @Test
-    public void testIncreaseScoreIfAdHasPictures(){
+    public void testIncreaseScoreIfAdHasPictures() {
         // Arrange
         AdVO adWithHdAndSDPictures = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 0, null);
         AdVO adWithHdPictures = new AdVO(2, "", "", Collections.singletonList(1), 0, 0, 0, null);
@@ -60,20 +60,20 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testDecreaseScoreIfAdHasNoPictures(){
+    public void testDecreaseScoreIfAdHasNoPictures() {
         AdVO adWithoutPictures = new AdVO(1, "", "", Collections.emptyList(), 0, 0, 0, null);
         assertEquals(inMemoryServiceImpl.calculateScore(adWithoutPictures, Collections.emptyList()), 0);
     }
 
     @Test
-    public void testIncreaseScoreIfAdHasDescription(){
+    public void testIncreaseScoreIfAdHasDescription() {
         AdVO adWithDescription = new AdVO(1, "", "Descripción", Collections.singletonList(1), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
         assertEquals(inMemoryServiceImpl.calculateScore(adWithDescription, Collections.singletonList(pictureHd)), 25);
     }
 
     @Test
-    public void testIncreaseScoreIfDescriptionHasBetween20And49Words(){
+    public void testIncreaseScoreIfDescriptionHasBetween20And49Words() {
         AdVO flat = new AdVO(1, "FLAT", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20", Collections.singletonList(1), 0, 0, 0, null);
         AdVO chalet = new AdVO(2, "CHALET", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20", Collections.singletonList(1), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
@@ -83,7 +83,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testIncreaseScoreIfDescriptionHas50WordsOrMore(){
+    public void testIncreaseScoreIfDescriptionHas50WordsOrMore() {
         AdVO flat = new AdVO(1, "FLAT", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50", Collections.singletonList(1), 0, 0, 0, null);
         AdVO chalet = new AdVO(2, "CHALET", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50", Collections.singletonList(1), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
@@ -93,7 +93,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testIncreaseScoreIfAdHasAwardedWordsInDescription(){
+    public void testIncreaseScoreIfAdHasAwardedWordsInDescription() {
         // Arrange
         AdVO adWithOneAwardedWord = new AdVO(1, "FLAT", "Luminoso", Collections.singletonList(1), 0, 0, 0, null);
         AdVO adWithTwoAwardedWords = new AdVO(1, "FLAT", "Luminoso, Nuevo", Collections.singletonList(1), 0, 0, 0, null);
@@ -111,7 +111,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testIncreaseScoreIfAdIsComplete(){
+    public void testIncreaseScoreIfAdIsComplete() {
         AdVO flat = new AdVO(1, "FLAT", "Descripción", Collections.singletonList(1), 20, 0, 0, null);
         AdVO chalet = new AdVO(2, "CHALET", "Descripción", Collections.singletonList(1), 20, 50, 0, null);
         AdVO garage = new AdVO(2, "GARAGE", null, Collections.singletonList(1), 0, 0, 0, null);
@@ -123,7 +123,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testFindAllAds(){
+    public void testFindAllAds() {
         AdVO flat = new AdVO(1, "FLAT", "Descripción", Collections.singletonList(1), 20, 0, 0, null);
         AdVO chalet = new AdVO(2, "CHALET", "Descripción", Collections.singletonList(1), 20, 50, 0, null);
         AdVO garage = new AdVO(2, "GARAGE", null, Collections.singletonList(1), 0, 0, 0, null);
@@ -137,7 +137,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testFindAllPictures(){
+    public void testFindAllPictures() {
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
         PictureVO pictureSd = new PictureVO(2, "http://www.idealista.com/pictures/2", "SD");
         List<PictureVO> picturesToReturn = Arrays.asList(pictureHd, pictureSd);
@@ -150,7 +150,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testFindPicturesByAd(){
+    public void testFindPicturesByAd() {
         AdVO adWithHdAndSDPictures = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 0, null);
         PictureVO pictureHd = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
         PictureVO pictureSd = new PictureVO(2, "http://www.idealista.com/pictures/2", "SD");
@@ -164,7 +164,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testFillIrrelevantSince(){
+    public void testFillIrrelevantSince() {
         AdVO relevantAd = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 40, null);
         AdVO irrelevantAd = new AdVO(2, "", "", Arrays.asList(1, 2), 0, 0, 39, null);
 
@@ -176,7 +176,7 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testCreateQualityAdFromAdVO(){
+    public void testCreateQualityAdFromAdVO() {
         Date irrelevantSince = new Date(System.currentTimeMillis());
         AdVO ad = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 39, irrelevantSince);
         PictureVO picture = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
@@ -187,7 +187,7 @@ public class InMemoryServiceTest {
 
         List<QualityAd> qualityAds = inMemoryServiceImpl.qualityListing();
 
-        for(int i = 0; i < qualityAds.size(); i++) {
+        for (int i = 0; i < qualityAds.size(); i++) {
             AdVO adToCompare = ads.get(i);
             QualityAd qualityAd = qualityAds.get(i);
 
@@ -214,7 +214,7 @@ public class InMemoryServiceTest {
 
         List<PublicAd> publicAds = inMemoryServiceImpl.publicListing();
 
-        for(int i = 0; i < publicAds.size(); i++) {
+        for (int i = 0; i < publicAds.size(); i++) {
             AdVO adToCompare = ads.get(i);
             PublicAd publicAd = publicAds.get(i);
 
