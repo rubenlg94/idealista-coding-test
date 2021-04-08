@@ -1,18 +1,32 @@
-package com.idealista.infrastructure.api;
+package com.idealista.valueobjects;
 
 import java.util.Date;
 import java.util.List;
 
-public class QualityAd {
+public class AdVO {
 
     private Integer id;
     private String typology;
     private String description;
-    private List<String> pictureUrls;
+    private List<Integer> pictures;
     private Integer houseSize;
     private Integer gardenSize;
     private Integer score;
     private Date irrelevantSince;
+
+    public AdVO() {
+    }
+
+    public AdVO(Integer id, String typology, String description, List<Integer> pictures, Integer houseSize, Integer gardenSize, Integer score, Date irrelevantSince) {
+        this.id = id;
+        this.typology = typology;
+        this.description = description;
+        this.pictures = pictures;
+        this.houseSize = houseSize;
+        this.gardenSize = gardenSize;
+        this.score = score;
+        this.irrelevantSince = irrelevantSince;
+    }
 
     public Integer getId() {
         return id;
@@ -38,12 +52,12 @@ public class QualityAd {
         this.description = description;
     }
 
-    public List<String> getPictureUrls() {
-        return pictureUrls;
+    public List<Integer> getPictures() {
+        return pictures;
     }
 
-    public void setPictureUrls(List<String> pictureUrls) {
-        this.pictureUrls = pictureUrls;
+    public void setPictures(List<Integer> pictures) {
+        this.pictures = pictures;
     }
 
     public Integer getHouseSize() {
