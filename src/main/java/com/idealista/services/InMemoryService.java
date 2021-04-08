@@ -1,5 +1,6 @@
 package com.idealista.services;
 
+import com.idealista.entities.QualityAd;
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
 
@@ -19,4 +20,5 @@ public interface InMemoryService {
 
     void fillIrrelevantSince(AdVO ad);
 
+    List<QualityAd> qualityListing();
 }

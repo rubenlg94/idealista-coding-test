@@ -1,5 +1,6 @@
 package com.idealista.services;
 
+import com.idealista.entities.QualityAd;
 import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.impl.InMemoryServiceImpl;
 import com.idealista.utilities.Utilities;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -172,7 +174,7 @@ public class InMemoryServiceTest {
     @Test
     public void testFillIrrelevantSince(){
         AdVO relevantAd = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 40, null);
-        AdVO irrelevantAd = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 39, null);
+        AdVO irrelevantAd = new AdVO(2, "", "", Arrays.asList(1, 2), 0, 0, 39, null);
 
         inMemoryServiceImpl.fillIrrelevantSince(relevantAd);
         inMemoryServiceImpl.fillIrrelevantSince(irrelevantAd);
@@ -181,6 +183,32 @@ public class InMemoryServiceTest {
         assertNotNull(irrelevantAd.getIrrelevantSince());
     }
 
+    @Test
+    public void testCreateQualityAdFromAdVO(){
+        Date irrelevantSince = new Date(System.currentTimeMillis());
+        AdVO ad = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 39, irrelevantSince);
+        PictureVO picture = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+        List<AdVO> ads = Collections.singletonList(ad);
+        List<PictureVO> pictures = Collections.singletonList(picture);
+        when(inMemoryRepository.findAllAds()).thenReturn(ads);
+        when(inMemoryRepository.findPicturesByAd(ad.getId())).thenReturn(pictures);
+
+        List<QualityAd> qualityAds = inMemoryServiceImpl.qualityListing();
+
+        for(int i = 0; i < qualityAds.size(); i++) {
+            AdVO adToCompare = ads.get(i);
+            QualityAd qualityAd = qualityAds.get(i);
+
+            assertEquals(adToCompare.getId(), qualityAd.getId());
+            assertEquals(adToCompare.getIrrelevantSince(), qualityAd.getIrrelevantSince());
+            assertEquals(adToCompare.getDescription(), qualityAd.getDescription());
+            assertEquals(adToCompare.getTypology(), qualityAd.getTypology());
+            assertEquals(adToCompare.getHouseSize(), qualityAd.getHouseSize());
+            assertEquals(adToCompare.getGardenSize(), qualityAd.getGardenSize());
+            assertEquals(adToCompare.getScore(), qualityAd.getScore());
+            assertEquals(pictures.stream().map(PictureVO::getUrl).collect(Collectors.toList()), qualityAd.getPictureUrls());
+        }
+    }
 
 
 }

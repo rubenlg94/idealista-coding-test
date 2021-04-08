@@ -1,14 +1,18 @@
 package com.idealista.services.impl;
 
 import com.idealista.constants.Values;
+import com.idealista.entities.QualityAd;
 import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.InMemoryService;
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InMemoryServiceImpl implements InMemoryService {
@@ -37,7 +41,7 @@ public class InMemoryServiceImpl implements InMemoryService {
     @Override
     public void fillScoresAndIrrelevantSince() {
         List<AdVO> ads = findAllAds();
-        for(AdVO ad: ads) {
+        for (AdVO ad : ads) {
             List<PictureVO> adPictures = findPicturesByAd(ad.getId());
             ad.setScore(calculateScore(ad, adPictures));
             fillIrrelevantSince(ad);
@@ -46,9 +50,37 @@ public class InMemoryServiceImpl implements InMemoryService {
 
     @Override
     public void fillIrrelevantSince(AdVO ad) {
-        if(ad.getScore() < Values.Ads.MINIMUM_SCORE) {
+        if (ad.getScore() < Values.Ads.MINIMUM_SCORE) {
             ad.setIrrelevantSince(new Date(System.currentTimeMillis()));
         }
+    }
+
+    @Override
+    public List<QualityAd> qualityListing() {
+        List<AdVO> ads = findAllAds();
+        return createQualityAdsFromAdVOs(ads);
+    }
+
+    private List<QualityAd> createQualityAdsFromAdVOs(List<AdVO> sortedAds) {
+        List<QualityAd> qualityAds = new ArrayList<>();
+        for (AdVO adVO : sortedAds) {
+            QualityAd qualityAd = createQualityAdFromAdVO(adVO);
+            qualityAds.add(qualityAd);
+        }
+        return qualityAds;
+    }
+
+    private QualityAd createQualityAdFromAdVO(AdVO adVO) {
+        QualityAd qualityAd = new QualityAd();
+        qualityAd.setId(adVO.getId());
+        qualityAd.setDescription(adVO.getDescription());
+        qualityAd.setGardenSize(adVO.getGardenSize());
+        qualityAd.setHouseSize(adVO.getHouseSize());
+        qualityAd.setIrrelevantSince(adVO.getIrrelevantSince());
+        qualityAd.setTypology(adVO.getTypology());
+        qualityAd.setScore(adVO.getScore());
+        qualityAd.setPictureUrls(findPicturesByAd(adVO.getId()).stream().map(PictureVO::getUrl).collect(Collectors.toList()));
+        return qualityAd;
     }
 
     @Override
