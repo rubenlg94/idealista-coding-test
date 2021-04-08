@@ -116,6 +116,11 @@ public class InMemoryServiceImpl implements InMemoryService {
         score += calculateDescriptionScore(ad);
         score += calculateCompleteAdScore(ad, pictures);
 
+        score = limitScore(score);
+        return score;
+    }
+
+    private int limitScore(int score) {
         score = Math.max(score, 0);
         score = Math.min(score, 100);
         return score;
