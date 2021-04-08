@@ -10,7 +10,6 @@ import com.idealista.valueobjects.PictureVO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,16 +112,16 @@ public class InMemoryServiceImpl implements InMemoryService {
     @Override
     public int calculateScore(AdVO ad, List<PictureVO> pictures) {
         int score = 0;
-        score += checkAdPictures(pictures);
-        score += checkAdDescription(ad);
-        score += checkIfAdIsComplete(ad, pictures);
+        score += calculatePicturesScore(pictures);
+        score += calculateDescriptionScore(ad);
+        score += calculateCompleteAdScore(ad, pictures);
 
         score = Math.max(score, 0);
         score = Math.min(score, 100);
         return score;
     }
 
-    public int checkAdPictures(List<PictureVO> pictures) {
+    public int calculatePicturesScore(List<PictureVO> pictures) {
         int toIncrease = 0;
         if (pictures != null && !pictures.isEmpty()) {
             for (PictureVO picture : pictures) {
@@ -138,17 +137,17 @@ public class InMemoryServiceImpl implements InMemoryService {
         return toIncrease;
     }
 
-    public int checkAdDescription(AdVO ad) {
+    public int calculateDescriptionScore(AdVO ad) {
         int toIncrease = 0;
         if (ad.getDescription() != null && !ad.getDescription().isEmpty()) {
             toIncrease += 5;
-            toIncrease += checkAdDescriptionLength(ad);
-            toIncrease += checkAdDescriptionAwardedWords(ad);
+            toIncrease += calculateDescriptionLengthScore(ad);
+            toIncrease += calculateDescriptionAwardedWordsScore(ad);
         }
         return toIncrease;
     }
 
-    public int checkAdDescriptionLength(AdVO ad) {
+    public int calculateDescriptionLengthScore(AdVO ad) {
         int toIncrease = 0;
         if (ad.getTypology().equals("FLAT") || ad.getTypology().equals("CHALET")) {
             String adDescription = ad.getDescription();
@@ -167,7 +166,7 @@ public class InMemoryServiceImpl implements InMemoryService {
         return toIncrease;
     }
 
-    private int checkAdDescriptionAwardedWords(AdVO ad) {
+    private int calculateDescriptionAwardedWordsScore(AdVO ad) {
         int toIncrease = 0;
         String lowerCaseDescription = ad.getDescription().toLowerCase();
         if (lowerCaseDescription.contains("luminoso")) {
@@ -188,7 +187,7 @@ public class InMemoryServiceImpl implements InMemoryService {
         return toIncrease;
     }
 
-    private int checkIfAdIsComplete(AdVO ad, List<PictureVO> pictures) {
+    private int calculateCompleteAdScore(AdVO ad, List<PictureVO> pictures) {
         int toIncrease = 0;
         if (pictures != null && !pictures.isEmpty()) {
             switch (ad.getTypology()) {
