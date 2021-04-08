@@ -43,15 +43,6 @@ public class InMemoryServiceTest {
     }
 
     @Test
-    public void testScoreIsBetween0And100(){
-        for(AdVO ad : ads){
-            List<PictureVO> adPictures = pictures.stream().filter(pictureVO -> ad.getPictures() != null && ad.getPictures().contains(pictureVO.getId())).collect(Collectors.toList());
-            int adScore = inMemoryServiceImpl.calculateScore(ad, adPictures);
-            assertTrue(adScore >= 0 && adScore <= 100);
-        }
-    }
-
-    @Test
     public void testIncreaseScoreIfAdHasPictures(){
         // Arrange
         AdVO adWithHdAndSDPictures = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 0, null);
