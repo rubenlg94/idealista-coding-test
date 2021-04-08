@@ -1,5 +1,6 @@
 package com.idealista.services;
 
+import com.idealista.entities.PublicAd;
 import com.idealista.entities.QualityAd;
 import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.impl.InMemoryServiceImpl;
@@ -207,6 +208,31 @@ public class InMemoryServiceTest {
             assertEquals(adToCompare.getGardenSize(), qualityAd.getGardenSize());
             assertEquals(adToCompare.getScore(), qualityAd.getScore());
             assertEquals(pictures.stream().map(PictureVO::getUrl).collect(Collectors.toList()), qualityAd.getPictureUrls());
+        }
+    }
+
+    @Test
+    public void testCreatePublicAdFromAdVO() {
+        Date irrelevantSince = new Date(System.currentTimeMillis());
+        AdVO ad = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 39, irrelevantSince);
+        PictureVO picture = new PictureVO(1, "http://www.idealista.com/pictures/2", "HD");
+        List<AdVO> ads = Collections.singletonList(ad);
+        List<PictureVO> pictures = Collections.singletonList(picture);
+        when(inMemoryRepository.findAllAds()).thenReturn(ads);
+        when(inMemoryRepository.findPicturesByAd(ad.getId())).thenReturn(pictures);
+
+        List<PublicAd> publicAds = inMemoryServiceImpl.publicListing();
+
+        for(int i = 0; i < publicAds.size(); i++) {
+            AdVO adToCompare = ads.get(i);
+            PublicAd publicAd = publicAds.get(i);
+
+            assertEquals(adToCompare.getId(), publicAd.getId());
+            assertEquals(adToCompare.getDescription(), publicAd.getDescription());
+            assertEquals(adToCompare.getTypology(), publicAd.getTypology());
+            assertEquals(adToCompare.getHouseSize(), publicAd.getHouseSize());
+            assertEquals(adToCompare.getGardenSize(), publicAd.getGardenSize());
+            assertEquals(pictures.stream().map(PictureVO::getUrl).collect(Collectors.toList()), publicAd.getPictureUrls());
         }
     }
 

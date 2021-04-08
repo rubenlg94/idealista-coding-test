@@ -1,6 +1,7 @@
 package com.idealista.services.impl;
 
 import com.idealista.constants.Values;
+import com.idealista.entities.PublicAd;
 import com.idealista.entities.QualityAd;
 import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.InMemoryService;
@@ -61,9 +62,9 @@ public class InMemoryServiceImpl implements InMemoryService {
         return createQualityAdsFromAdVOs(ads);
     }
 
-    private List<QualityAd> createQualityAdsFromAdVOs(List<AdVO> sortedAds) {
+    private List<QualityAd> createQualityAdsFromAdVOs(List<AdVO> ads) {
         List<QualityAd> qualityAds = new ArrayList<>();
-        for (AdVO adVO : sortedAds) {
+        for (AdVO adVO : ads) {
             QualityAd qualityAd = createQualityAdFromAdVO(adVO);
             qualityAds.add(qualityAd);
         }
@@ -81,6 +82,32 @@ public class InMemoryServiceImpl implements InMemoryService {
         qualityAd.setScore(adVO.getScore());
         qualityAd.setPictureUrls(findPicturesByAd(adVO.getId()).stream().map(PictureVO::getUrl).collect(Collectors.toList()));
         return qualityAd;
+    }
+
+    @Override
+    public List<PublicAd> publicListing() {
+        List<AdVO> ads = inMemoryRepository.findRelevantAds();
+        return createPublicAdsFromAdVOs(ads);
+    }
+
+    private List<PublicAd> createPublicAdsFromAdVOs(List<AdVO> ads) {
+        List<PublicAd> publicAds = new ArrayList<>();
+        for (AdVO adVO : ads) {
+            PublicAd publicAd = createPublicAdFromAdVO(adVO);
+            publicAds.add(publicAd);
+        }
+        return publicAds;
+    }
+
+    private PublicAd createPublicAdFromAdVO(AdVO adVO) {
+        PublicAd publicAd = new PublicAd();
+        publicAd.setId(adVO.getId());
+        publicAd.setDescription(adVO.getDescription());
+        publicAd.setGardenSize(adVO.getGardenSize());
+        publicAd.setHouseSize(adVO.getHouseSize());
+        publicAd.setTypology(adVO.getTypology());
+        publicAd.setPictureUrls(findPicturesByAd(adVO.getId()).stream().map(PictureVO::getUrl).collect(Collectors.toList()));
+        return publicAd;
     }
 
     @Override
