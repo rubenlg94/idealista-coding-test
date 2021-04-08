@@ -1,5 +1,6 @@
 package com.idealista.repositores;
 
+import com.idealista.constants.Values;
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
 import org.springframework.stereotype.Repository;
@@ -51,6 +52,10 @@ public class InMemoryRepository {
             pictureVOS = pictures.stream().filter(pictureVO -> ad.getPictures().contains(pictureVO.getId())).collect(Collectors.toList());
         }
         return pictureVOS;
+    }
+
+    public List<AdVO> findRelevantAds(){
+        return ads.stream().filter(adVO -> adVO.getScore() >= Values.Ads.MINIMUM_SCORE).collect(Collectors.toList());
     }
 
 
