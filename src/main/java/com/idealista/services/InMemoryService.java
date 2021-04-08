@@ -17,7 +17,7 @@ public interface InMemoryService {
 
     int calculateScore(AdVO ad, List<PictureVO> pictures);
 
-    void fillScoresAndIrrelevantSince();
+    void scoreAds();
 
     void fillIrrelevantSince(AdVO ad);
 

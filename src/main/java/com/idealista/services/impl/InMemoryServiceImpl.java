@@ -39,7 +39,7 @@ public class InMemoryServiceImpl implements InMemoryService {
     }
 
     @Override
-    public void fillScoresAndIrrelevantSince() {
+    public void scoreAds() {
         List<AdVO> ads = findAllAds();
         for (AdVO ad : ads) {
             List<PictureVO> adPictures = findPicturesByAd(ad.getId());
