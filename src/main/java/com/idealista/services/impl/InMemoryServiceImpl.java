@@ -1,19 +1,17 @@
 package com.idealista.services.impl;
 
+import com.idealista.constants.Values;
 import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.InMemoryService;
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class InMemoryServiceImpl implements InMemoryService {
-
-    @Value("${ads-configuration.minimum-score}")
-    private int minimumScore;
 
     private final InMemoryRepository inMemoryRepository;
 
@@ -34,6 +32,23 @@ public class InMemoryServiceImpl implements InMemoryService {
     @Override
     public List<PictureVO> findPicturesByAd(int adId) {
         return inMemoryRepository.findPicturesByAd(adId);
+    }
+
+    @Override
+    public void fillScoresAndIrrelevantSince() {
+        List<AdVO> ads = findAllAds();
+        for(AdVO ad: ads) {
+            List<PictureVO> adPictures = findPicturesByAd(ad.getId());
+            ad.setScore(calculateScore(ad, adPictures));
+            fillIrrelevantSince(ad);
+        }
+    }
+
+    @Override
+    public void fillIrrelevantSince(AdVO ad) {
+        if(ad.getScore() < Values.Ads.MINIMUM_SCORE) {
+            ad.setIrrelevantSince(new Date(System.currentTimeMillis()));
+        }
     }
 
     @Override

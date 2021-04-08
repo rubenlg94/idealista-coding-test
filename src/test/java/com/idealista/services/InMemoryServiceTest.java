@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+@ContextConfiguration
 public class InMemoryServiceTest {
 
     private List<AdVO> ads;
@@ -165,6 +167,18 @@ public class InMemoryServiceTest {
 
         assertEquals(picturesToReturn.size(), picturesReturned.size());
         assertEquals(picturesToReturn.size(), picturesReturned.size());
+    }
+
+    @Test
+    public void testFillIrrelevantSince(){
+        AdVO relevantAd = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 40, null);
+        AdVO irrelevantAd = new AdVO(1, "", "", Arrays.asList(1, 2), 0, 0, 39, null);
+
+        inMemoryServiceImpl.fillIrrelevantSince(relevantAd);
+        inMemoryServiceImpl.fillIrrelevantSince(irrelevantAd);
+
+        assertNull(relevantAd.getIrrelevantSince());
+        assertNotNull(irrelevantAd.getIrrelevantSince());
     }
 
 
