@@ -55,7 +55,7 @@ public class InMemoryRepository {
     }
 
     public List<AdVO> findRelevantAds() {
-        return ads.stream().filter(adVO -> adVO.getScore() >= Values.Ads.MINIMUM_SCORE).collect(Collectors.toList());
+        return ads.stream().filter(adVO -> adVO.getScore() >= Values.Ads.MINIMUM_SCORE).sorted(Comparator.comparingInt(AdVO::getScore).reversed()).collect(Collectors.toList());
     }
 
 
