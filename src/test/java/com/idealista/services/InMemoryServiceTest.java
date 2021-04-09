@@ -4,7 +4,6 @@ import com.idealista.entities.PublicAd;
 import com.idealista.entities.QualityAd;
 import com.idealista.repositores.InMemoryRepository;
 import com.idealista.services.impl.InMemoryServiceImpl;
-import com.idealista.utilities.Utilities;
 import com.idealista.valueobjects.AdVO;
 import com.idealista.valueobjects.PictureVO;
 import org.junit.Before;

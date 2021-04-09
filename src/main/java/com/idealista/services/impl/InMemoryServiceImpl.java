@@ -10,6 +10,7 @@ import com.idealista.valueobjects.PictureVO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -172,50 +173,45 @@ public class InMemoryServiceImpl implements InMemoryService {
     }
 
     private int calculateDescriptionAwardedWordsScore(AdVO ad) {
-        int toIncrease = 0;
         String lowerCaseDescription = ad.getDescription().toLowerCase();
-        if (lowerCaseDescription.contains("luminoso")) {
-            toIncrease += 5;
-        }
-        if (lowerCaseDescription.contains("nuevo")) {
-            toIncrease += 5;
-        }
-        if (lowerCaseDescription.contains("céntrico")) {
-            toIncrease += 5;
-        }
-        if (lowerCaseDescription.contains("reformado")) {
-            toIncrease += 5;
-        }
-        if (lowerCaseDescription.contains("ático")) {
-            toIncrease += 5;
-        }
+        int toIncrease = 5 * (int) (Values.Ads.AWARDED_WORDS.stream().filter(lowerCaseDescription::contains).count());
         return toIncrease;
     }
 
     private int calculateCompleteAdScore(AdVO ad, List<PictureVO> pictures) {
         int toIncrease = 0;
-        if (pictures != null && !pictures.isEmpty()) {
-            switch (ad.getTypology()) {
-                case "CHALET":
-                    if (ad.getDescription() != null && !ad.getDescription().isEmpty()
-                            && ad.getHouseSize() != null && ad.getHouseSize() != 0
-                            && ad.getGardenSize() != null && ad.getGardenSize() != 0) {
-                        toIncrease += 40;
-                    }
-                    break;
-                case "FLAT":
-                    if (ad.getDescription() != null && !ad.getDescription().isEmpty()
-                            && ad.getHouseSize() != null && ad.getHouseSize() != 0) {
-                        toIncrease += 40;
-                    }
-                    break;
-                case "GARAGE":
-                    toIncrease += 40;
-                    break;
-            }
+        if(isCompleteAd(ad, pictures)){
+            toIncrease = 40;
         }
         return toIncrease;
     }
 
+    private boolean isCompleteAd(AdVO ad, List<PictureVO> pictures) {
+        boolean isComplete = false;
+        if (pictures != null && !pictures.isEmpty()) {
+            switch (ad.getTypology()) {
+                case "CHALET":
+                    isComplete = isCompleteChalet(ad);
+                    break;
+                case "FLAT":
+                    isComplete = isCompleteFlat(ad);
+                    break;
+                case "GARAGE":
+                    isComplete = true;
+            }
+        }
+        return isComplete;
+    }
+
+    private boolean isCompleteChalet(AdVO ad){
+        return ad.getDescription() != null && !ad.getDescription().isEmpty()
+                && ad.getHouseSize() != null && ad.getHouseSize() != 0
+                && ad.getGardenSize() != null && ad.getGardenSize() != 0;
+    }
+
+    private boolean isCompleteFlat(AdVO ad) {
+        return ad.getDescription() != null && !ad.getDescription().isEmpty()
+                && ad.getHouseSize() != null && ad.getHouseSize() != 0;
+    }
 
 }
