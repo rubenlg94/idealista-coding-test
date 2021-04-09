@@ -26,9 +26,6 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration
 public class InMemoryServiceTest {
 
-    private List<AdVO> ads;
-    private List<PictureVO> pictures;
-
     @Mock
     private InMemoryRepository inMemoryRepository;
 
@@ -38,8 +35,6 @@ public class InMemoryServiceTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        ads = Utilities.generateTestAds();
-        pictures = Utilities.generateTestPictures();
     }
 
     @Test
